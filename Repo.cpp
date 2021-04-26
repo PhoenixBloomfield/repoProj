@@ -9,6 +9,7 @@ doublyNode* Repo::createDoublyNode(int commitNum) {
     initialNode->commitNumber = commitNum;
     nodeCount ++;
     initialNode->next = NULL;
+    return initialNode;
 }
 
 doublyNode* Repo::createDoublyNode(int commitNum, doublyNode* previous) {
@@ -18,25 +19,26 @@ doublyNode* Repo::createDoublyNode(int commitNum, doublyNode* previous) {
     initialNode->commitNumber = commitNum;
     nodeCount ++;
     initialNode->next = NULL;
+    return initialNode;
 }
 
 
 Repo::Repo() : nodeCount(0)
 //constructor
 {
-    headNode = createDoublyNode(getDoublyNodeCount());
+    headNode = createDoublyNode(getLatestCommitNum());
     latestCommit = headNode;
-    currentCommit = 0;
+    currentCommit = headNode;
 }
 
 void Repo::commit() {
-    latestCommit->next = createDoublyNode(getDoublyNodeCount(), latestCommit);
+    latestCommit->next = createDoublyNode(getLatestCommitNum(), latestCommit);
     latestCommit = latestCommit->next;
     currentCommit = latestCommit;
 }
 
 bool Repo::currentLatestMismatch() {
-    if(currentCommit == latestCommit) return false;
+    if((currentCommit->commitNumber) == latestCommit->commitNumber) return false;
     cout << "Error: operation prohibited while checking out code." << endl;
     return true;
 }
@@ -50,23 +52,29 @@ singlyNode* createSinglyNode(string fileName, singlyNode* next) {
     newNode->fileName = fileName;
     newNode->next = next;
     newNode->fileVersion = "00";
+    return newNode;
 }
 
 void Repo::addFile(string fileName) {
-    latestCommit->head = createSinglyNode(fileName, latestCommit->head);
+    singlyNode* newNode = createSinglyNode(fileName, latestCommit->head);
+    latestCommit->head = newNode;
+    cout << " Successfully added." << endl;
 }
 
-int Repo::getDoublyNodeCount() {
+int Repo::getLatestCommitNum() {
     return nodeCount;
 }
 
 bool Repo::removeFile(string fileName) {
     bool found = false;
     singlyNode* current = latestCommit->head;
-    if(current == NULL) return false;
+    if(current == NULL) {
+        return false;
+    }
     if(current->fileName == fileName) {
         latestCommit->head = current->next;
         delete current;
+        return true;
     }
     while(found == false && current->next != NULL) {
         if(current->next->fileName == fileName) found == true;
@@ -76,4 +84,5 @@ bool Repo::removeFile(string fileName) {
     singlyNode* temp = current->next;
     current->next = current->next->next;
     delete temp;
+    return true;
 }

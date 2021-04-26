@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
 	}
 	Repo Rep;
 	bool quit = false;
+	//needs to create .minigit directory
 	while (!quit)
 	{
 		int option;
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
 		switch (option)
 		{
 
-			case 1:
+			case 1: //add new file
 			{
 				if(Rep.currentLatestMismatch()) break;
 				do {
@@ -60,9 +61,11 @@ int main(int argc, char *argv[])
 					cout << "Error: file already added. Cannot add same file twice." << endl;
 					break;
 				}
+				Rep.addFile(inputLine);
+				//still needs to create file in .minigit 
 				break;
 			}
-			case 2:
+			case 2: // remove file - branch complete
 			{
 				if(Rep.currentLatestMismatch()) break;
 				cout << "Name of file to be removed:" << endl;
@@ -71,30 +74,31 @@ int main(int argc, char *argv[])
 				if(removed) cout << "File successfully removed." << endl;
 				else cout << "File could not be removed." << endl;
 				break;
-				//branch done
 			}
-	        case 3:
+	        case 3: //commit - not complete
 			{
 				if(Rep.currentLatestMismatch()) break;
 	            break;
 			}
-            case 4:
+            case 4: //checkout - not complete
 			{
 	            cout << "Warning: will overwrite current changes in directory." << endl;
 				getline(cin, inputLine);
 
-				if (inputLine.length() != 1 || inputLine[0] < '0' || inputLine[1] > '4') 
+				if (inputLine.length() != 1 || inputLine[0] < '0' || inputLine[1] > Rep.getLatestCommitNum()) 
 				{
-				cerr << "Invalid option : " << inputLine << endl;
+				cerr << "Invalid option: " << inputLine << endl;
 				continue; 
 				}
+				//checks for whether requested commit num is valid
+
+
 	            break;
 			}
-            case 5:
+            case 5: //quit - branch complete
 			{
 				quit = true;
                 break;
-				//branch done
 			}
 	}
 }

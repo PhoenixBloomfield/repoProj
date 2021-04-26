@@ -22,17 +22,23 @@ class Repo {
     public:
         void addFile(string fileName);
         bool removeFile(string fileName);
-        // same as above although per writeup there are multiple error messages so error msgs must be included in function
+        //complete
         void commit();
         void checkout();
         doublyNode* getCurrentCommit();
+        //returns the currently opened commit
         Repo();
+        //constructor
         bool currentLatestMismatch();
-        int getDoublyNodeCount();
+        //checks whether current commit is latest; add/remove/commit disabled when checking out code
+        int getLatestCommitNum();
+        //returns num of latest commit
         doublyNode* createDoublyNode(int commitNum);
+        //for first node
         doublyNode* createDoublyNode(int commitNum, doublyNode* previous);
     private:
         doublyNode* headNode;
+        //first node
         doublyNode* latestCommit;
         doublyNode* currentCommit;
         int nodeCount;
